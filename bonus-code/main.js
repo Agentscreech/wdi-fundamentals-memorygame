@@ -2,7 +2,6 @@ console.log("JS file is connected to HTML! Woo!");
 var cardPairs = [];
 var cardsInPlay = [];
 var cardsMatched = [];
-var toBeRemoved = [];
 var cards = [];
 var boardMaker = document.getElementById('game-board');
 var tries = 0;
@@ -27,7 +26,7 @@ function shuffle(array) { //stole this from stackOverflow, it randomizes the arr
   return array;
 }
 
-function clearBoard () { //removes all existing game board children and resets the card value arrays and score
+function clearBoard () { //removes all existing game board children, resets the card value arrays and score
   tries = 0;
   cards = [];
   cardPairs = [];
@@ -36,7 +35,7 @@ function clearBoard () { //removes all existing game board children and resets t
     wipe.removeChild(wipe.firstChild);
   }
 }
-var createBoard = function(qty) {
+var createBoard = function(qty) {  // creates a new div class="card" with the attribute of 'data-card' and a value from the randomized cardPairs array, runs the isTwoCards function on click then adds it as a child to the game-board div.
     for (var i = 0; i < qty; i++){
     var newCard = document.createElement('div');
     newCard.className = "card";
@@ -46,7 +45,7 @@ var createBoard = function(qty) {
     }
 };
 
-var isTwoCards = function(){ // adds a label to the card then if there are 2 cards in play, it calls the matching function
+var isTwoCards = function(){ // stores the clicked card in the cardsInPlay array, adds a label to the card then if there are 2 cards in play, it calls the matching function
     tries += 0.5;
     cardsInPlay.push(this.getAttribute('data-card'));
     var label = this.getAttribute('data-card');
@@ -56,7 +55,7 @@ var isTwoCards = function(){ // adds a label to the card then if there are 2 car
     }
 };
 
-var gameEnding = function () { // sorts the cards that have been matched from lowest to highest, then converts those from string to integer, then compares the 2 arrays.
+var gameEnding = function () { // sorts the cards that have been matched from lowest to highest, then converts those from string to integer, then compares the cards with cardsMatched.
     cardsMatched.sort(function(a,b){return a - b});
     cardsMatched=cardsMatched.map(Number);
     var isEqual = (JSON.stringify(cards) === JSON.stringify(cardsMatched));
@@ -68,7 +67,7 @@ var gameEnding = function () { // sorts the cards that have been matched from lo
 };
 
 var clearUnmatched = function () {
-  var clear = document.querySelectorAll("[data-card]"); // grabs all data cards nodes, for each card in play, test to see if any card matches the text content in it, if so, clear textContent.
+  var clear = document.querySelectorAll("[data-card]"); // grabs all data card nodes, for each card in play, test to see if any card matches the text content in it, if so, clear textContent.
   for (var i = 0; i < cardsInPlay.length; i++) {
     for (var j = 0; j < cardPairs.length; j++)
       if (clear[j].textContent === cardsInPlay[i]) {
@@ -79,7 +78,7 @@ var clearUnmatched = function () {
   };
 
 
-var isMatch = function() {  // tests the array to see if they are equal, if not, clear the board.
+var isMatch = function() {  // tests the array to see if they are equal, if so then build array of matched cards then sees if you won, if not, clear the board of the unmatched cards.
   if (cardsInPlay[0] === cardsInPlay[1]) {
     // setTimeout(function() {
     //   alert("You found a match!");
@@ -91,7 +90,7 @@ var isMatch = function() {  // tests the array to see if they are equal, if not,
     // setTimeout(function() {
     //   alert("Sorry, not a match. Try again!");
     // }, 50);
-    setTimeout(clearUnmatched, 500);
+    setTimeout(clearUnmatched, 500); //this delay is so you can see what you clicked and can have a chance at memorizing it
     // clearUnmatched();
   }
 };
