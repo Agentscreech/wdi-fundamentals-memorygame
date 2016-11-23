@@ -30,8 +30,6 @@ function clearBoard () { //removes all existing game board children, resets the 
   tries = 0;
   cards = [];
   cardPairs = [];
-  cardsMatched = [];
-  cardsInPlay = [];
   var wipe = document.getElementById("game-board");
   while (wipe.firstChild) {
     wipe.removeChild(wipe.firstChild);
@@ -48,10 +46,10 @@ var createBoard = function(qty) {  // creates a new div class="card" with the at
 };
 
 var isTwoCards = function(){ // stores the clicked card in the cardsInPlay array, adds a label to the card then if there are 2 cards in play, it calls the matching function
+    tries += 0.5;
     cardsInPlay.push(this.getAttribute('data-card'));
     var label = this.getAttribute('data-card');
     this.innerHTML = '<p>' + label + '</p>';
-    this.removeEventListener('click', isTwoCards); // makes the card unclickable again to avoid issues with clicking the same card twice
     if (cardsInPlay.length === 2) {
         isMatch(cardsInPlay);
     }
@@ -59,7 +57,7 @@ var isTwoCards = function(){ // stores the clicked card in the cardsInPlay array
 
 var gameEnding = function () { // sorts the cards that have been matched from lowest to highest, then converts those from string to integer, then compares the cards with cardsMatched.
     cardsMatched.sort(function(a,b){return a - b});
-    cardsMatched = cardsMatched.map(Number);
+    cardsMatched=cardsMatched.map(Number);
     var isEqual = (JSON.stringify(cards) === JSON.stringify(cardsMatched));
     if (isEqual === true) {
       setTimeout(function() {
@@ -70,49 +68,39 @@ var gameEnding = function () { // sorts the cards that have been matched from lo
 
 var clearUnmatched = function () {
   var clear = document.querySelectorAll("[data-card]"); // grabs all data card nodes, for each card in play, test to see if any card matches the text content in it, if so, clear textContent.
-  var cleared = 0;
-  // while (cleared !== 2) {
   for (var i = 0; i < cardsInPlay.length; i++) {
     for (var j = 0; j < cardPairs.length; j++)
       if (clear[j].textContent === cardsInPlay[i]) {
         clear[j].textContent = "";
-        clear[j].addEventListener('click', isTwoCards);
-        // cleared += 1;
       }
     }
-  // }
   cardsInPlay = [];
   };
 
 
 var isMatch = function() {  // tests the array to see if they are equal, if so then build array of matched cards then sees if you won, if not, clear the board of the unmatched cards.
-    tries += 1;
   if (cardsInPlay[0] === cardsInPlay[1]) {
-    var makeInactive = document.querySelectorAll("[data-card]");
+    // setTimeout(function() {
+    //   alert("You found a match!");
+    // }, 50);
     cardsMatched.push(cardsInPlay[0]);
-    for (var i = 0; i < cardPairs.length; i++) { //this makes the cards that are a successful match unclickable
-      if (makeInactive[i].textContent === cardsInPlay[0]) {
-        makeInactive[i].removeEventListener('click', isTwoCards);
-      }
-    }
     cardsInPlay = [];
     gameEnding();
   } else {
+    // setTimeout(function() {
+    //   alert("Sorry, not a match. Try again!");
+    // }, 50);
     setTimeout(clearUnmatched, 500); //this delay is so you can see what you clicked and can have a chance at memorizing it
+    // clearUnmatched();
   }
 };
 
 var startGame = function() {  //clears the board, asks how many pairs, generates that many, shuffles them, then creates the board.
   clearBoard();
-  var askQty = prompt("How many pairs do you want to use", "enter 2 or more");
-  if (askQty < 2) {
-    alert("You need to enter a value of 2 or higher");
-    startGame();
-  } else {
+  var askQty = prompt("How many pairs do you want to use", "2 or more");
   possibleCardsGenerator(askQty);
   cardPairs = shuffle(cardPairs);
   createBoard(askQty*2);
-}
 };
 
 var startButton = document.getElementById('start');
