@@ -1,0 +1,65 @@
+body {
+    background: url(http://littlemanparking.com/wp-content/uploads/2014/01/parking_garage1.jpg);
+    background-size: cover;
+    margin: 0 auto;
+  }
+
+ul li {
+    color: white;
+    text-align: center;
+    list-style: none;
+}
+img {
+    display: block;
+    margin: 0 auto;
+    max-width: 80%;
+}
+h1 {
+    color: white;
+    text-align: center;
+    font-size: 40px;
+}
+.container {
+  display: flex;
+  flex-flow: row wrap;
+
+}
+.distance {
+    margin: 0 auto;
+    min-width: 30%;
+    color: white;
+    flex: none;
+}
+.distance h2 {
+    text-align: center;
+}
+.distance span{
+    float: right;
+}
+.price {
+    margin: 0 auto;
+    min-width: 30%;
+    flex: none;
+    color: white;
+
+}
+.price span {
+    float: right;
+}
+.price h2 {
+    text-align: center;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+footer a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}
